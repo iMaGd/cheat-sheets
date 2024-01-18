@@ -63,8 +63,17 @@ if prompt_yes_no "Grant '$USERNAME' Superuser privileges?"; then
         echo "authorized_keys copied to directory of '$USERNAME' user."
     fi
 
-fi
+elif prompt_yes_no "Grant '$USERNAME' Moderator privileges?"; then
 
+    # Grant access to LEMP and LAMP stack services
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service apache2 *" | sudo tee /etc/sudoers.d/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service nginx *" | sudo tee /etc/sudoers.d/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service php*-fpm *" | sudo tee /etc/sudoers.d/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service mysql *" | sudo tee /etc/sudoers.d/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service mariadb *" | sudo tee /etc/sudoers.d/${USERNAME}
+
+    sudo chmod 0440 /etc/sudoers.d/${USERNAME}
+fi
 
 
 # Print list of all current users
