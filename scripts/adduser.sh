@@ -56,13 +56,6 @@ if prompt_yes_no "Grant '$USERNAME' Superuser privileges?"; then
     echo "sudoer file added at /etc/sudoers.d/${USERNAME}"
     echo "Superuser privileges added to '$USERNAME' user."
 
-    # Copy authorized public key for new admin if 'yes'
-    if prompt_yes_no "Copy /root/.ssh/authorized_keys to directory of '$USERNAME' as well? (CAUTION)"; then
-        sudo mkdir -p /home/${USERNAME}/.ssh && sudo cp /root/.ssh/authorized_keys /home/${USERNAME}/.ssh/authorized_keys
-
-        echo "authorized_keys copied to directory of '$USERNAME' user."
-    fi
-
 elif prompt_yes_no "Grant '$USERNAME' Moderator privileges?"; then
 
     # Grant access to LEMP and LAMP stack services
@@ -73,6 +66,13 @@ elif prompt_yes_no "Grant '$USERNAME' Moderator privileges?"; then
     echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service mariadb *" | sudo tee /etc/sudoers.d/${USERNAME}
 
     sudo chmod 0440 /etc/sudoers.d/${USERNAME}
+fi
+
+# Copy authorized public keys to directory of this user, if 'yes'
+if prompt_yes_no "Copy authorized_keys of root user to directory of '$USERNAME' user? (CAUTION)"; then
+    sudo mkdir -p /home/${USERNAME}/.ssh && sudo cp /root/.ssh/authorized_keys /home/${USERNAME}/.ssh/authorized_keys
+
+    echo "authorized_keys copied to directory of '$USERNAME' user."
 fi
 
 
