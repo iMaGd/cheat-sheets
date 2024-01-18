@@ -72,6 +72,11 @@ fi
 if prompt_yes_no "Copy authorized_keys of root user to directory of '$USERNAME' user? (CAUTION)"; then
     sudo mkdir -p /home/${USERNAME}/.ssh && sudo cp /root/.ssh/authorized_keys /home/${USERNAME}/.ssh/authorized_keys
 
+    # Apply proper permissions and ownership
+    sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.ssh
+    sudo chmod 700 /home/${USERNAME}/.ssh
+    sudo chmod 600 /home/${USERNAME}/.ssh/authorized_keys
+
     echo "authorized_keys copied to directory of '$USERNAME' user."
 fi
 
