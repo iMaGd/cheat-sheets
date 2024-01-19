@@ -41,30 +41,41 @@ if prompt_yes_no "Flush rules and start with a clean set of rules?!"; then
 	sudo iptables -F
 fi
 
-# start seting rules
+# Ensure any traffic that isn't explicitly allowed is denied
 sudo iptables -P INPUT DROP
 sudo iptables -P FORWARD DROP
 sudo iptables -P OUTPUT ACCEPT
 
 # Allow local loopback traffic
 sudo iptables -A INPUT -i lo -j ACCEPT
+sudo iptables -A OUTPUT -o lo -j ACCEPT
+
 # Allow established and related connections
 sudo iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
 # Allow SSH
 sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
 
 # Allow HTTP and HTTPS
 sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 2027 -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
-sudo iptables -A INPUT -p tcp -m tcp --dport 5900 -j ACCEPT
-sudo iptables -A INPUT -p tcp -m tcp --dport 5901 -j ACCEPT
 
-sudo iptables -A INPUT -s 192.168.1.0/24 -p udp -m udp --dport 137 -j ACCEPT
-sudo iptables -A INPUT -s 192.168.1.0/24 -p udp -m udp --dport 138 -j ACCEPT
-sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp -m tcp --dport 139 -j ACCEPT
-sudo iptables -A INPUT -s 192.168.1.0/24 -p tcp -m tcp --dport 445 -j ACCEPT
+# Allow for custom docker ports
+sudo iptables -A INPUT -p tcp --match multiport --dports 7000:7999 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+# Mitigate SYN flood attack
+sudo iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+sudo iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+sudo iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+
+# No direct access to the MySQL or MariaDB port
+sudo iptables -A INPUT -p tcp --dport 3306 -j ACCEPT
+# sudo iptables -A INPUT -p tcp --dport 3306 -s 0.0.0.0 -j ACCEPT
+
+# Prevent port scanning
+sudo iptables -N port-scanning
+sudo iptables -A port-scanning -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s --limit-burst 2 -j RETURN
+sudo iptables -A port-scanning -j DROP
 
 sudo iptables -A INPUT -j DROP
 sudo iptables -A INPUT -j DROP
