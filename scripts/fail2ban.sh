@@ -23,11 +23,13 @@ maxretry = 3
 EOF
 
 # Check config file
-echo "Config added to new config file: "
+echo "--------------------"
+echo -e "Config added to new config file:\n "
 sudo cat /etc/fail2ban/jail.d/override.local
+echo -e "--------------------\n"
 
 # Restart fail2ban service to apply the changes
-echo "Restarting the service .."
+echo -e "Restarting the service ..\n"
 sudo systemctl restart fail2ban
 
 
