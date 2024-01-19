@@ -1,8 +1,8 @@
 #!/bin/bash
 
-apt update && apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 
-apt install -y \
+sudo apt install -y \
   unzip zip nano openssh-server \
   curl wget axel \
   htop pv tree git nano pwgen \
