@@ -24,7 +24,7 @@ if prompt_yes_no "Disable UFW?"; then
 	sudo ufw disable
 	sudo systemctl stop ufw
 	sudo systemctl mask ufw
-	sudo ufw reset
+	sudo ufw reset -y
 fi
 
 echo -e "Init iptables: .. \n";
@@ -52,6 +52,9 @@ sudo iptables -A OUTPUT -o lo -j ACCEPT
 
 # Allow established and related connections
 sudo iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+# Allow incoming ICMP echo requests
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -m conntrack --ctstate NEW,ESTABLISHED -m limit --limit 1/s -j ACCEPT
 
 # Allow SSH
 sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
