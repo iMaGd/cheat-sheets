@@ -37,27 +37,34 @@ pm.max_spare_servers = 30
 
 ---------
 
-16 GB ram
-
+# 16 GB ram
 pm = dynamic
 pm.max_children = 160
 pm.start_servers = 40
 pm.min_spare_servers = 40
 pm.max_spare_servers = 120
 
-4 GB ram
+# 8 GB ram
+pm = dynamic
+pm.max_children = 200
+pm.start_servers = 50
+pm.min_spare_servers = 50
+pm.max_spare_servers = 150
 
+# 4 GB ram
 pm = dynamic
 pm.max_children = 86
 pm.start_servers = 21
 pm.min_spare_servers = 21
 pm.max_spare_servers = 64
 
+# 2 GB ram
 pm = dynamic
-pm.max_children = 5
-pm.start_servers = 40
-pm.min_spare_servers = 40
-pm.max_spare_servers = 120
+pm.max_children = 35
+pm.start_servers = 8
+pm.min_spare_servers = 8
+pm.max_spare_servers = 26
+
 ```
 
 ### FPM Config (new user)

@@ -9,6 +9,13 @@ apt install -y \
   htop pv tree git nano pwgen \
   openssl certbot
 
+# Disable ufw
+sudo ufw app list
+sudo ufw disable
+sudo systemctl stop ufw
+sudo systemctl mask ufw
+sudo ufw reset -y
+sudo apt remove --purge ufw -y
 
 # PHP & PHP-FPM install
 apt install software-properties-common && add-apt-repository ppa:ondrej/php && sudo apt update

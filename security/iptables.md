@@ -11,10 +11,12 @@ check if iptables is installed
 
    Disable ufw
    ```bash
-	sudo ufw disable
+	sudo ufw app list
+   sudo ufw disable
    sudo systemctl stop ufw
    sudo systemctl mask ufw
-   sudo ufw reset
+   sudo ufw reset -y
+   sudo apt remove --purge ufw -y
    ```
 
 To save and reload your iptables rules on system reboot, you can use the `iptables-persistent` package.

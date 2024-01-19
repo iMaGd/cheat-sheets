@@ -10,11 +10,11 @@ apt install -y \
   openssl certbot
 
 # Disable ufw
-ufw app list
+sudo ufw app list
 sudo ufw disable
 sudo systemctl stop ufw
 sudo systemctl mask ufw
-sudo ufw reset
+sudo ufw reset -y
 sudo apt remove --purge ufw -y
 
 # Install Apache2

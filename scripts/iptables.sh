@@ -21,10 +21,15 @@ prompt_yes_no() {
 
 
 if prompt_yes_no "Disable UFW?"; then
-	sudo ufw disable
-	sudo systemctl stop ufw
-	sudo systemctl mask ufw
-	sudo ufw reset -y
+    sudo ufw app list
+    sudo ufw disable
+    sudo systemctl stop ufw
+    sudo systemctl mask ufw
+    sudo ufw reset -y
+fi
+
+if prompt_yes_no "Remove UFW?"; then
+    sudo apt remove --purge ufw -y
 fi
 
 echo -e "Init iptables: .. \n";
