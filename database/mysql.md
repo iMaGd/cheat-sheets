@@ -102,8 +102,24 @@ service mysql restart
 mysql -u root -p -h <host_ip>
 ```
 
-## Troubleshooting
+## Backups
+Set up a backup routine for your databases. MySQL's `mysqldump` utility is commonly used for making backups, which can be scheduled with `cron` jobs.
 
+
+## Monitoring and Logs
+Keep an eye on MySQL logs located in `/var/log/mysql/` for errors or issues.
+
+
+## Regular Database Maintenance
+Regularly check your database's health with commands like:
+```sql
+CHECK TABLE tablename;
+ANALYZE TABLE tablename;
+OPTIMIZE TABLE tablename;
+```
+
+
+## Troubleshooting
 - Check status `service mysql status`
 - Check log file at `/var/log/mysql/error.log`
 - Check configuration issues `sudo mysqlcheck --all-databases`
