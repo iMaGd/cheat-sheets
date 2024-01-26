@@ -29,7 +29,7 @@ php_version=${php_version:-8.1}
 php_fpm_socket="/var/run/php/php${php_version}-fpm.sock"
 
 # Setup WordPress VirtualHost
-echo "Configuring VirtualHost for WordPress multisite..."
+echo "Configuring VirtualHost for new site..."
 sudo tee /etc/apache2/sites-available/"$new_domain".conf > /dev/null << EOF
 <VirtualHost *:80>
 	ServerName "$new_domain"
