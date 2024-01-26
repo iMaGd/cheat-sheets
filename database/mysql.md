@@ -12,6 +12,11 @@ sudo mysql_secure_installation
 ## Start/Stop Service
 
 ```bash
+# start and enable mysql
+sudo systemctl start mysql.service
+sudo systemctl enable mysql.service
+
+# Other commands
 service mysql start;
 service mysql stop;
 service mysql restart;
