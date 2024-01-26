@@ -3,12 +3,6 @@
 # Exit on error
 set -e
 
-# Check if run as root or with sudo
-if [[ $(id -u) -ne 0 ]]; then
-    echo "This script must be run as root or with sudo privileges!" >&2
-    exit 1
-fi
-
 # Install Apache2
 echo "Installing Apache2..."
 sudo apt install -y apache2 apache2-utils

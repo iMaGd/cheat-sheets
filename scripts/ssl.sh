@@ -11,7 +11,7 @@ fi
 
 # Checking if a service is active
 is_service_active() {
-    systemctl is-active --quiet "$1"
+    sudo systemctl is-active --quiet "$1"
 }
 
 # Check for web server installation

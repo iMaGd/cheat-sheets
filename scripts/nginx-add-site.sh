@@ -3,12 +3,6 @@
 # Exit on error
 set -e
 
-# Check if run as root or with sudo
-if [[ $(id -u) -ne 0 ]]; then
-    echo "This script must be run as root or with sudo privileges!" >&2
-    exit 1
-fi
-
 # Ask for domain names
 read -p "Enter the domain name for new site (e.g., www.example.com): " new_domain
 read -p "Enter the name for new site (e.g., example_com): " site_name
@@ -67,12 +61,12 @@ echo "$server_block" > /etc/nginx/sites-available/$site_name
 
 
 # Enable the configuration by creating symlinks
-ln -s /etc/nginx/sites-available/$site_name /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/$site_name /etc/nginx/sites-enabled/
 
 # Check Nginx configuration for syntax errors
-nginx -t
+sudo nginx -t
 
 # Reload to apply changes
-systemctl reload nginx
+sudo systemctl reload nginx
 
 echo "Nginx has been installed and configured for new site."
