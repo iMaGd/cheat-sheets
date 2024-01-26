@@ -9,13 +9,9 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-# Update system packages
-echo "Updating package lists..."
-sudo apt update
-
 # Install Apache2
 echo "Installing Apache2..."
-sudo apt install -y apache2 apache2-utils python3-certbot-apache
+sudo apt install -y apache2 apache2-utils
 
 # Enable common mods
 echo "Enabling mod_rewrite..."
