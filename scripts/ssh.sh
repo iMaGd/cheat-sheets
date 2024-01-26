@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Ensure just root can run our script
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 1>&2
-   exit 1
-fi
-
 prompt_yes_no() {
     while true; do
         # Ask the user
@@ -26,30 +20,53 @@ prompt_yes_no() {
 }
 
 # Backup the SSH configuration
-cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bk
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bk
 
 # Enable public key authentication
-sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
-sed -i 's/^PubkeyAuthentication no/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+sudo sed -i 's/^PubkeyAuthentication no/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 
 # Disable password authentication
-sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 
 # Ensure empty passwords are not allowed
-sed -i 's/^#PermitEmptyPasswords yes/PermitEmptyPasswords no/' /etc/ssh/sshd_config
-sed -i 's/^PermitEmptyPasswords yes/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+sudo sed -i 's/^#PermitEmptyPasswords yes/PermitEmptyPasswords no/' /etc/ssh/sshd_config
+sudo sed -i 's/^PermitEmptyPasswords yes/PermitEmptyPasswords no/' /etc/ssh/sshd_config
 
 if prompt_yes_no "Block 'root' user to login?"; then
-   # Disable root SSH login
-   sed -i 's/^#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-   sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
-   sed -i 's/^PermitRootLogin without-password/PermitRootLogin no/' /etc/ssh/sshd_config
+
+    # Check if the current user is root; if yes, exit with an error
+    if [[ $(id -u) -eq 0 ]]; then
+        echo "This script should not be run as `root`. Please run as a different user with sudo privileges."
+        exit 1
+    fi
+
+    #!/bin/bash
+
+    # Check for sudo access without any password requirement
+    NO_PASSWD=$(sudo -l 2>/dev/null | grep -E '(NOPASSWD: ALL)')
+
+    # Check for full sudo access with password requirement
+    FULL_ACCESS=$(sudo -l 2>/dev/null | grep -E '(ALL : ALL) ALL')
+
+    # Check if either no password or full access lines are present
+    if [[ -n "$NO_PASSWD" || -n "$FULL_ACCESS" ]]; then
+        echo "\u2713 The user $(whoami) has full sudo privileges. Continue .."
+    else
+        echo "The user $(whoami) does not have full sudo privileges. Run the script with a user with full sudo privileges."
+        exit 1
+    fi
+
+    # Disable root SSH login
+    sudo sed -i 's/^#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    sudo sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    sudo sed -i 's/^PermitRootLogin without-password/PermitRootLogin no/' /etc/ssh/sshd_config
 fi
 
 sudo sshd -t
 
 # Restart to apply changes
-service sshd restart
+sudo service sshd restart
 
 echo "SSH has been secured."
