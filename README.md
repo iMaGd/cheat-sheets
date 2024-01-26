@@ -22,6 +22,53 @@ To get latest changes from repo:
 sudo chmod -x ./scripts/*.sh && git pull && sudo chmod +x ./scripts/*.sh
 ```
 
+### List of available setup scripts
+
+```bash
+# Install Ubuntu server essentials
+./scripts/ubuntu-init.sh
+
+# Add admin/moderator/regular user to server
+./scripts/adduser.sh
+
+# Install and configure Fail2Ban
+./scripts/fail2ban.sh
+
+# Harden SSH
+./scripts/ssh.sh
+
+# Setup firewall
+./scripts/iptables.sh
+
+# Install Web-server
+	./scripts/apache-install.sh # Apache2
+	# OR
+	./scripts/nginx-install.sh  # Nginx
+
+# Install PHP-FPM
+./scripts/php-fpm.sh
+
+# Install and secure Database
+	./scripts/mariadb-install.sh # MariaDB
+	# OR
+	./scripts/mysql-install.sh  # MySQL
+
+# Add database user
+./scripts/mysql-adduser.sh
+
+# Install Composer
+./scripts/composer-install.sh
+
+# Install WP CLI and WordPress
+./scripts/wp-cli.sh
+
+# Issue a SSL certificate
+./scripts/ssl.sh
+
+
+```
+
+
 ### Contents
 
 - [Install MySQL on Ubuntu 22.04](#install-mysql-on-ubuntu-2204)
