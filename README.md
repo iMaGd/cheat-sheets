@@ -10,11 +10,6 @@ git clone https://github.com/iMaGd/cheat-sheets.git && cd cheat-sheets
 sudo chmod +x ./scripts/*.sh
 ```
 
-Now you can call any of scripts. For example, to install Ubuntu essentials using `ubuntu-init.sh`, simply run:
-```bash
-./scripts/ubuntu-init.sh
-```
-
 ### Get latest changes
 
 To get latest changes from repo:
