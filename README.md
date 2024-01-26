@@ -2,6 +2,26 @@
 
 This repository contains a collection of cheat sheets useful for system administration and managing Linux servers, with a focus on tasks like configuring servers, managing users, and deploying applications.
 
+### Get started
+
+Clone the repository and permit for execution
+```bash
+git clone https://github.com/iMaGd/cheat-sheets.git && cd cheat-sheets
+sudo chmod +x ./scripts/*.sh
+```
+
+Now you can call any of scripts. For example, to install Ubuntu essentials using `ubuntu-init.sh`, simply run:
+```bash
+./scripts/ubuntu-init.sh
+```
+
+### Get latest changes
+
+To get latest changes from repo:
+```bash
+sudo chmod -x ./scripts/*.sh && git pull && sudo chmod +x ./scripts/*.sh
+```
+
 ### Contents
 
 - [Install MySQL on Ubuntu 22.04](#install-mysql-on-ubuntu-2204)
