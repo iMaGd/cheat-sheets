@@ -8,6 +8,14 @@ root_user=${root_user:-root}
 read -s -p "Enter MySQL/MariaDB root password: " root_pass
 echo ""
 
+# Verify credentials
+if mysql -u"$root_user" -p"$root_pass" -e "quit" 2>/dev/null; then
+    echo "Credentials are correct."
+else
+    echo "Wrong credentials."
+    exit 1
+fi
+
 # Prompt for new database username and password
 read -p "Enter new database user: " db_user
 read -s -p "Enter new database user password (leave blank to auto generate a strong password): " db_pass
