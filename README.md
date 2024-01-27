@@ -26,11 +26,14 @@ sudo chmod -x ./scripts/*.sh && git pull && sudo chmod +x ./scripts/*.sh
 # Add admin/moderator/regular user to server
 ./scripts/adduser.sh
 
-# Install and configure Fail2Ban
-./scripts/fail2ban.sh
-
 # Harden SSH
 ./scripts/ssh.sh
+
+# You can switch to new super admin if added
+su superadmin
+
+# Install and configure Fail2Ban
+./scripts/fail2ban.sh
 
 # Setup firewall
 ./scripts/iptables.sh

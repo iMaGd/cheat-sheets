@@ -78,6 +78,10 @@ if prompt_yes_no "Copy authorized_keys of root user to directory of '$USERNAME' 
     sudo chmod 600 /home/${USERNAME}/.ssh/authorized_keys
 
     echo "authorized_keys copied to directory of '$USERNAME' user."
+
+    # Restart to apply changes
+    sudo service sshd restart
+    echo "SSH service restarted and changes applied."
 fi
 
 
