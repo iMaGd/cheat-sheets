@@ -77,7 +77,12 @@ EOF
 	# Enable new site
 	sudo a2ensite "$new_domain"
 
-	echo "New virtualHost file added at ${vhost_conf_file}."
+
+	# Check config file
+	echo "--------------------"
+	echo -e "New virtualHost file added at ${vhost_conf_file}.\n"
+	sudo cat ${vhost_conf_file}
+	echo -e "--------------------\n"
 }
 
 # Check if the site configuration already exists
@@ -146,7 +151,12 @@ php_admin_value[disable_functions] = exec,passthru,shell_exec,system
 php_admin_flag[allow_url_fopen] = on
 EOF"
 
+
+	# Check config file
+	echo "--------------------"
 	echo "New PHP-FPm pool file added at ${pool_file}."
+	sudo cat ${pool_file}
+	echo -e "--------------------\n"
 
 	# Restart to apply the configuration
 	echo "Restarting PHP-FPM..."
