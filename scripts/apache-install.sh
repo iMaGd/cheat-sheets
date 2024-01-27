@@ -11,5 +11,6 @@ sudo apt install -y apache2 apache2-utils
 echo "Enabling mod_rewrite..."
 sudo a2enmod rewrite headers ssl dir deflate expires
 
+sudo service apache2 restart
 
-echo "Apache2 is installed"
+echo "Apache2 installation completed and successfully restarted"
