@@ -20,6 +20,7 @@ EOF
 # Check config file
 echo "--------------------"
 echo -e "Config added to new config file:\n "
+echo -e "-> /etc/fail2ban/jail.d/override.local \n "
 sudo cat /etc/fail2ban/jail.d/override.local
 echo -e "--------------------\n"
 
