@@ -57,7 +57,7 @@ fi
 if [ -n "$selected_php_version" ]; then
 
 	# Install php-fpm if answer was 'yes'
-	if prompt_yes_no "Do you want to update php.ini for PHP$selected_php_version-FPM?"; then
+	if prompt_yes_no "Do you want to optimize php.ini for PHP$selected_php_version-FPM?"; then
 
 		# Following are recommneded config from [/php/php-fpm.md]
 
