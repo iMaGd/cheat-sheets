@@ -58,10 +58,13 @@ if prompt_yes_no "Block 'root' user to login?"; then
         exit 1
     fi
 
-    # Disable root SSH login
+    # Disable login for root user
     sudo sed -i 's/^#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
     sudo sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
     sudo sed -i 's/^PermitRootLogin without-password/PermitRootLogin no/' /etc/ssh/sshd_config
+    # Disable login for root user even with Public key
+    sudo sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+    sudo sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 fi
 
 sudo sshd -t
