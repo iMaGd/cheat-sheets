@@ -39,23 +39,28 @@ su superadmin
 ./scripts/iptables.sh
 
 # Install Web-server
-	./scripts/apache-install.sh # Apache2
-	# OR
-	./scripts/nginx-install.sh  # Nginx
+./scripts/apache-install.sh # Apache2
+# OR
+./scripts/nginx-install.sh  # Nginx
 
 # Install PHP-FPM
 ./scripts/php-fpm.sh
 
 # Install and secure Database
-	./scripts/mariadb-install.sh # MariaDB
-	# OR
-	./scripts/mysql-install.sh  # MySQL
+./scripts/mariadb-install.sh # MariaDB
+# OR
+./scripts/mysql-install.sh  # MySQL
 
 # Add database user
 ./scripts/mysql-adduser.sh
 
 # Install Composer
 ./scripts/composer-install.sh
+
+# Add a virtual site
+./scripts/apache-add-site.sh
+# OR
+./scripts/nginx-add-site.sh
 
 # Install WP CLI and WordPress
 ./scripts/wp-cli.sh
