@@ -17,7 +17,7 @@ then
 fi
 
 # Run the installer.
-php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
+sudo php composer-setup.php --quiet --install-dir=/usr/local/bin --filename=composer
 RESULT=$?
 sudo rm composer-setup.php
 
