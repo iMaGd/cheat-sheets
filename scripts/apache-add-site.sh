@@ -76,6 +76,8 @@ EOF
 
 	# Enable new site
 	sudo a2ensite "$new_domain"
+
+	echo "New virtualHost file added at ${vhost_conf_file}."
 }
 
 # Check if the site configuration already exists
@@ -102,15 +104,66 @@ fi
 if prompt_yes_no "Do you want to add a info.php file with phpinfo() in the new site directory?"; then
 	sudo mkdir -p $site_path
 	sudo bash -c "echo '<?php phpinfo(); ?>' > $site_path/info.php"
+	sudo chmod 644 "${site_path}/info.php"
 fi
 
-# Set appropriate permissions for the info.php file
-sudo chown www-data:www-data "${site_path}/info.php"
-sudo chmod 644 "${site_path}/info.php"
+# Create the info.php file with phpinfo()
+if prompt_yes_no "Do you want to run this site with `www-data` user?"; then
+	# Set appropriate permissions
+	sudo chown -R www-data:www-data "${site_path}"
+
+
+elif prompt_yes_no "Do you want to run this site with another user instead of `www-data` user?"; then
+
+	read -p "Enter the username: " site_user
+
+	pool_dir="/etc/php/${php_version}/fpm/pool.d"
+	pool_file="${pool_dir}/${site_user}.conf"
+
+	# Check if the PHP-FPM pool already exists
+	if [ -f "${pool_file}" ]; then
+		echo "PHP-FPM pool configuration for user '${site_user}' already exists: ${pool_file}"
+		exit 1
+	fi
+
+	# Create PHP-FPM pool configuration for the user
+	echo "Creating PHP-FPM pool for '${site_user}'..."
+	sudo bash -c "cat > ${pool_file} << EOF
+[${site_user}]
+user = ${site_user}
+group = ${site_user}
+listen = /var/run/php/php${php_version}-fpm-${site_user}.sock
+listen.owner = ${site_user}
+listen.group = ${site_user}
+pm = dynamic
+pm.max_children = 35
+pm.start_servers = 8
+pm.min_spare_servers = 8
+pm.max_spare_servers = 26
+chdir = /
+security.limit_extensions = .php
+php_admin_value[disable_functions] = exec,passthru,shell_exec,system
+php_admin_flag[allow_url_fopen] = on
+EOF"
+
+	echo "New PHP-FPm pool file added at ${pool_file}."
+
+	# Restart to apply the configuration
+	echo "Restarting PHP-FPM..."
+	sudo service php${php_version}-fpm restart
+
+	# Update Apache configuration to use the user's PHP-FPM pool
+	echo "Updating Apache configuration for '${site_user}'..."
+	sudo sed -i "s|unix:/run/php/php${php_version}-fpm.sock|unix:/var/run/php/php${php_version}-fpm-${site_user}.sock|g" "${vhost_conf_file}"
+	sudo sed -i "s|unix:/var/run/php/php${php_version}-fpm.sock|unix:/var/run/php/php${php_version}-fpm-${site_user}.sock|g" "${vhost_conf_file}"
+
+	# Set appropriate permissions
+	sudo chown -R "${site_user}:${site_user}" "${site_path}"
+fi
+
 
 # Reload Apache to apply all the changes
 echo "Reloading Apache..."
 sudo service apache2 reload
 
-echo "New virtualHost file added at ${vhost_conf_file}."
-echo "New site is configured successfully."
+echo "Site is configured successfully."
