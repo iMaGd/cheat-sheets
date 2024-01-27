@@ -182,4 +182,4 @@ fi
 echo "Reloading Apache..."
 sudo service apache2 reload
 
-echo "Site is configured successfully."
+echo "Site is configured successfully. Visit http://${new_domain}/ or http://${new_domain}/info.php"
