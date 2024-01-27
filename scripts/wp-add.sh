@@ -38,6 +38,7 @@ if prompt_yes_no "Setup WordPress configuration?"; then
 	read -p "Enter database user: " dbuser
 	read -s -p "Enter database password: " dbpass
 	echo ""
+
 	read -p "Enter database host [localhost]: " dbhost
 	dbhost=${dbhost:-localhost}
 	read -p "Enter table prefix [wp_]: " dbprefix
@@ -50,8 +51,9 @@ define( 'WP_DEBUG_LOG', $( [[ "$wp_debug" == "y" ]] && echo 'true' || echo 'fals
 PHP
 
 	# Create the database
-	sudo -u $wp_owner -i -- wp db create --path="$wp_path"
-
+	if prompt_yes_no "Create the database?"; then
+		sudo -u $wp_owner -i -- wp db create --path="$wp_path"
+	fi
 fi
 
 
@@ -76,6 +78,9 @@ elif prompt_yes_no "or install a WordPress single site?"; then
 	admin_pass=$(openssl rand -base64 12)
 
 	sudo -u $wp_owner -i -- wp core install --url="$site_url" --title="Website" --admin_user="$admin_user" --admin_password="$admin_pass" --admin_email="admin@domain.com" --path="$wp_path"
+
+	# Output the username and password
+	echo "User '$admin_user' created with the password '$admin_pass'"
 fi
 
 if prompt_yes_no "Install starter theme and plugins?"; then
