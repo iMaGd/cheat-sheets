@@ -62,8 +62,11 @@ su superadmin
 # OR
 ./scripts/nginx-add-site.sh
 
-# Install WP CLI and WordPress
+# Install WP CLI
 ./scripts/wp-cli.sh
+
+# Adds a WP site
+./scripts/wp-add.sh
 
 # Issue a SSL certificate
 ./scripts/ssl.sh
