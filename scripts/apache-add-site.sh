@@ -55,7 +55,10 @@ sudo a2ensite "$new_domain"
 echo "Disabling default Apache VirtualHost..."
 sudo a2dissite 000-default.conf
 
+sudo service apache2 reload
+
 # Create the info.php file with phpinfo()
+suod mkdir -p $site_path
 sudo bash -c "echo '<?php phpinfo(); ?>' > $site_path/info.php"
 
 # Set appropriate permissions for the info.php file
