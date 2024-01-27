@@ -9,16 +9,11 @@ sudo tee /etc/fail2ban/jail.d/override.local > /dev/null << 'EOF'
 [DEFAULT]
 bantime = 10m
 findtime = 10m
-maxretry = 5
-backend = auto
-usedns = warn
-logencoding = auto
+maxretry = 6
 
 [sshd]
 enabled = true
-port = ssh
-filter = sshd
-logpath = %(sshd_log)s
+bantime = 30m
 maxretry = 3
 EOF
 
