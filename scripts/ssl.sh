@@ -3,9 +3,15 @@
 # Exit on error
 set -e
 
-# Check if run as root or with sudo
-if [[ $(id -u) -ne 0 ]]; then
-    echo "This script must be run as root or with sudo privileges!" >&2
+
+# Prompt the user to confirm DNS record setup
+read -p "Have you set up a DNS A Record to point your domain to this server's IP address? (y/n): " dns_setup_confirmed
+
+# Convert input to lowercase and check
+dns_setup_confirmed="${dns_setup_confirmed,,}"
+
+if [ "$dns_setup_confirmed" != "y" ]; then
+    echo "Please setup a DNS A Record before continuing. Terminated .."
     exit 1
 fi
 
@@ -18,24 +24,16 @@ is_service_active() {
 if is_service_active apache2; then
     web_server="Apache"
     certbot_plugin="apache"
+    echo "You are using 'apache2' as webserver."
 elif is_service_active nginx; then
     web_server="Nginx"
     certbot_plugin="nginx"
+    echo "You are using 'nginx' as webserver."
 else
     echo "No supported web server (Apache or Nginx) found. Please install a web server and try again."
     exit 1
 fi
 
-# Prompt the user to confirm DNS record setup
-read -p "Have you set up a DNS A Record to point your domain to this server's IP address? (y/n): " dns_setup_confirmed
-
-# Convert input to lowercase and check
-dns_setup_confirmed="${dns_setup_confirmed,,}"
-
-if [ "$dns_setup_confirmed" != "y" ]; then
-    echo "Please setip a DNS A Record before running this script."
-    exit 1
-fi
 
 # Prompt user for the domain and email address
 read -p "Enter the domain name for the SSL certificate (e.g., example.com): " domain_name
