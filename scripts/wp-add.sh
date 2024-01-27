@@ -23,7 +23,7 @@ read -p "Enter WP installation path (/var/www/html): " wp_path
 read -p "Enter user that is owner of directory: " wp_owner
 
 # Download WordPress core
-if prompt_yes_no "Do you want to download WordPress core in current directory?"; then
+if prompt_yes_no "Do you want to download WordPress core in '${wp_path}' directory?"; then
 	sudo -u $wp_owner -i -- wp core download --path="$wp_path"
 	echo "WordPress core downloaded."
 else
