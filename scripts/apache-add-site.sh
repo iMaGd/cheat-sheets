@@ -25,10 +25,10 @@ php_fpm_socket="/var/run/php/php${php_version}-fpm.sock"
 echo "Configuring VirtualHost for new site..."
 sudo tee /etc/apache2/sites-available/"$new_domain".conf > /dev/null << EOF
 <VirtualHost *:80>
-	ServerName "$new_domain"
-	# ServerAlias "www.$new_domain"
+	ServerName $new_domain
+	# ServerAlias www.${new_domain}
 
-	DocumentRoot "$site_path"
+	DocumentRoot $site_path
 
 	<Directory "$site_path">
         # Don't show directory index
@@ -43,8 +43,8 @@ sudo tee /etc/apache2/sites-available/"$new_domain".conf > /dev/null << EOF
 		SetHandler "proxy:unix:$php_fpm_socket|fcgi://localhost/"
 	</FilesMatch>
 
-	ErrorLog \${APACHE_LOG_DIR}/"$new_domain".error.log
-    CustomLog \${APACHE_LOG_DIR}/"$new_domain".access.log combined
+	ErrorLog \${APACHE_LOG_DIR}/${new_domain}.error.log
+    CustomLog \${APACHE_LOG_DIR}/${new_domain}.access.log combined
 </VirtualHost>
 EOF
 
