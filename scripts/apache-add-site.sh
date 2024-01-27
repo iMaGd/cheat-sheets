@@ -158,7 +158,13 @@ EOF"
 	sudo sed -i "s|unix:/var/run/php/php${php_version}-fpm.sock|unix:/var/run/php/php${php_version}-fpm-${site_user}.sock|g" "${vhost_conf_file}"
 
 	# Set appropriate permissions
-	sudo chown -R "${site_user}:${site_user}" "${site_path}"
+	sudo chown -R ${site_user}:${site_user} ${site_path}
+
+	# Since Apache/Nginx runs under the `www-data` user and requires only read access
+	# simply add `www-data` to the '${site_user}' group.
+	# This will enable `www-data` to read files owned by the '${site_user}' user
+	sudo usermod -aG ${site_user} www-data
+
 fi
 
 
