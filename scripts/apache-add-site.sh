@@ -113,12 +113,12 @@ if prompt_yes_no "Do you want to add a info.php file with phpinfo() in the new s
 fi
 
 # Create the info.php file with phpinfo()
-if prompt_yes_no "Do you want to run this site with `www-data` user?"; then
+if prompt_yes_no "Do you want to run this site with 'www-data' user?"; then
 	# Set appropriate permissions
 	sudo chown -R www-data:www-data "${site_path}"
 
 
-elif prompt_yes_no "Do you want to run this site with another user instead of `www-data` user?"; then
+elif prompt_yes_no "Do you want to run this site with another user instead of 'www-data' user?"; then
 
 	read -p "Enter the username: " site_user
 
