@@ -71,6 +71,8 @@ su superadmin
 # Issue a SSL certificate
 ./scripts/ssl.sh
 
+# Install PhpMyAdmin
+./scripts/phpmyadmin.sh
 
 ```
 
