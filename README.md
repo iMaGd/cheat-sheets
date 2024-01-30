@@ -6,7 +6,7 @@ This repository contains a collection of cheat sheets useful for system administ
 
 Clone the repository and permit for execution
 ```bash
-git clone https://github.com/iMaGd/cheat-sheets.git && cd cheat-sheets
+sudo git clone https://github.com/iMaGd/cheat-sheets.git && cd cheat-sheets
 sudo chmod +x ./scripts/*.sh
 ```
 
@@ -14,7 +14,7 @@ sudo chmod +x ./scripts/*.sh
 
 To get latest changes from repo:
 ```bash
-sudo chmod -x ./scripts/*.sh && git pull && sudo chmod +x ./scripts/*.sh
+sudo chmod -x ./scripts/*.sh && sudo git pull && sudo chmod +x ./scripts/*.sh
 ```
 
 ### List of available setup scripts
