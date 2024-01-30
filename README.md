@@ -54,13 +54,13 @@ su superadmin
 # Add database user
 ./scripts/mysql-adduser.sh
 
-# Install Composer
-./scripts/composer-install.sh
-
 # Add a virtual site
 ./scripts/apache-add-site.sh
 # OR
 ./scripts/nginx-add-site.sh
+
+# Install Composer
+./scripts/composer-install.sh
 
 # Install WP CLI
 ./scripts/wp-cli.sh
