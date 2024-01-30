@@ -25,7 +25,7 @@ sudo cat /etc/fail2ban/jail.d/override.local
 echo -e "--------------------\n"
 
 # Restart fail2ban service to apply the changes
-echo -e "Restarting the service ..\n"
+echo -e "Restarting the service .. (takes time, be patient!)\n"
 sudo systemctl restart fail2ban
 
 
