@@ -46,7 +46,7 @@ done
 
 # Ask if php-fpm should be installed
 if prompt_yes_no "Install PHP-FPM?"; then
-	sudo apt install software-properties-common && add-apt-repository ppa:ondrej/php && sudo apt update
+	sudo apt install software-properties-common && sudo add-apt-repository ppa:ondrej/php && sudo apt update
 
     sudo apt install php${selected_php_version}-{cli,common,fpm,curl,bcmath,xml,dev,imap,mysql,zip,intl,gd,imagick,bz2,curl,mbstring,soap,cgi,redis,ssh2,yaml} -y
 
