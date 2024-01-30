@@ -38,7 +38,7 @@ if prompt_yes_no "Block 'root' user to login?"; then
 
     # Check if the current user is root; if yes, exit with an error
     if [[ $(id -u) -eq 0 ]]; then
-        echo "This script should not be run as `root`. Please run as a different user with sudo privileges."
+        echo "This script should not be run as 'root' user. Please run as a different user with sudo privileges."
         exit 1
     fi
 
@@ -52,7 +52,7 @@ if prompt_yes_no "Block 'root' user to login?"; then
 
     # Check if either no password or full access lines are present
     if [[ -n "$NO_PASSWD" || -n "$FULL_ACCESS" ]]; then
-        echo "\u2713 The user $(whoami) has full sudo privileges. Continue .."
+        echo "The user $(whoami) has full sudo privileges. Continue .."
     else
         echo "The user $(whoami) does not have full sudo privileges. Run the script with a user with full sudo privileges."
         exit 1
