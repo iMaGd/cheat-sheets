@@ -46,16 +46,26 @@ EOF
 
         # Configure Nginx
         sudo tee /etc/nginx/conf.d/phpmyadmin.conf > /dev/null << EOF
-location "${PMA_ALIAS}" {
+location ${PMA_ALIAS} {
     root /usr/share/;
     index index.php index.html index.htm;
     location ~ ^${PMA_ALIAS}/(.+\.php)$ {
         try_files \$uri =404;
-        root /usr/share/;
+
         fastcgi_pass unix:/var/run/php/php${PHP_FPM_VERSION}-fpm.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
         include /etc/nginx/fastcgi_params;
+    }
+
+    # It is often better to deny access to .htaccess files and other hidden files
+    location ~ /\.ht {
+        deny all;
+    }
+
+    # Deny access to files that might contain sensitive information
+    location ~* \.(txt|md|conf|ini|sql|sh|bak)$ {
+        deny all;
     }
 }
 EOF
