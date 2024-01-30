@@ -48,7 +48,11 @@ done
 if prompt_yes_no "Install PHP-FPM?"; then
 	sudo apt install software-properties-common && sudo add-apt-repository ppa:ondrej/php && sudo apt update
 
-    sudo apt install php${selected_php_version}-{cli,common,fpm,curl,bcmath,xml,dev,imap,mysql,zip,intl,gd,imagick,bz2,curl,mbstring,soap,cgi,redis,ssh2,yaml} -y
+	# Install PHP FPM and common extensions
+    sudo apt install php${selected_php_version}-{cli,common,fpm,curl,bcmath,xml,xmlrpc,dev,imap,mysql,zip,intl,gd,imagick,bz2,curl,mbstring,soap,cgi,redis,ssh2,yaml,intl} -y
+
+	# Install additional modules for Laravel or certain PHP apps
+	sudo apt install php${selected_php_version}-{readline,ldap,pgsql,sqlite3,opcache} -y
 
 	echo "PHP version $selected_php_version is successfully installed."
 fi
