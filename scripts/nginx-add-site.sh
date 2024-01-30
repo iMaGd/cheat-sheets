@@ -30,13 +30,13 @@ server {
     server_name $new_domain;
     root $site_path;
 
-	add_header X-Frame-Options \"SAMEORIGIN\";
-    add_header X-Content-Type-Options \"nosniff\";
-    add_header X-XSS-Protection \"1; mode=block\";
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
+    add_header X-XSS-Protection "1; mode=block";
 
     index index.php index.html;
 
-	charset utf-8;
+    charset utf-8;
 
     location / {
         try_files \$uri \$uri/ /index.php?\$args;
@@ -60,7 +60,7 @@ EOF
 
     # Check config file
     echo "--------------------"
-    echo -e "New conf file added at ${vhost_conf_file}.\n"
+    echo -e "New conf file added at ${vhost_conf_file}\n"
     sudo cat ${vhost_conf_file}
     echo -e "--------------------\n"
 }
