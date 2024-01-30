@@ -23,9 +23,9 @@ echo "Configuring VirtualHost for new site..."
 
 sudo service nginx restart
 
+conf_file="/etc/nginx/sites-available/${site_name}"
 
-# Sample configurations for WordPress and Laravel
-server_block="
+sudo tee "$conf_file" > /dev/null << EOF
 server {
     listen 80;
     server_name $new_domain;
@@ -54,10 +54,13 @@ server {
         deny all;
     }
 }
-"
+EOF
 
-# Create configuration files from the blocks above
-echo "$server_block" > /etc/nginx/sites-available/$site_name
+# Check config file
+echo "--------------------"
+echo -e "New conf file added at ${conf_file}.\n"
+sudo cat ${conf_file}
+echo -e "--------------------\n"
 
 
 # Enable the configuration by creating symlinks
