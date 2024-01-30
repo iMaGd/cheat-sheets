@@ -19,6 +19,25 @@ php_version=${php_version:-8.1}
 php_fpm_socket="/var/run/php/php${php_version}-fpm.sock"
 vhost_conf_file="/etc/nginx/sites-available/${site_name}"
 
+# Function to prompt for y/n question
+prompt_yes_no() {
+    while true; do
+        # Ask the user
+        read -rp "$1 [Y/n]: " answer
+
+        # Default to Yes if no answer is given.
+        if [[ -z $answer ]]; then
+            answer="N"
+        fi
+
+        # Check the answer
+        case "$answer" in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
 
 add_new_virtualhost() {
     echo "Configuring VirtualHost for new site..."
