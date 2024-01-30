@@ -43,6 +43,9 @@ add_new_virtualhost() {
     echo "Configuring VirtualHost for new site..."
     sudo mkdir -p $site_path
 
+    # Removing previous symbolic link
+    sudo rm /etc/nginx/sites-enabled/${site_name}
+
     sudo tee "$vhost_conf_file" > /dev/null << EOF
 server {
     listen 80;
