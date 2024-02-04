@@ -7,7 +7,7 @@ sudo nano /etc/php/8.1/fpm/php.ini
 ```
 ```ini
 memory_limit = 512M                ; Maximum amount of memory a script may consume.
-post_max_size = 48M                ; Maximum size of POST data (Should always be higher than upload_max_filesize)
+post_max_size = 32M                ; Maximum size of POST data (Should always be higher than upload_max_filesize)
 upload_max_filesize = 32M          ; Maximum allowed size for uploaded files.
 max_execution_time = 60            ; Maximum execution time of each script, in seconds.
 max_input_time = 120               ; Maximum amount of time each script may spend parsing request data.
