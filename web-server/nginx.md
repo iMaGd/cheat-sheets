@@ -17,6 +17,8 @@ server {
 
     index index.html index.htm index.php;
 
+    client_max_body_size 32M;
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }
@@ -42,6 +44,8 @@ server {
 
     root /var/www/wpmu;
     index index.php;
+
+    client_max_body_size 32M;
 
     location / {
         try_files $uri $uri/ /index.php?$args;

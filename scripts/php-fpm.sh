@@ -66,7 +66,7 @@ if [ -n "$selected_php_version" ]; then
 		# Following are recommneded config from [/php/php-fpm.md]
 
 		memory_limit="512M"
-		post_max_size="48M"
+		post_max_size="32M"
 		upload_max_filesize="32M"
 		max_execution_time="60"
 		max_input_time="120"
