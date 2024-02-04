@@ -10,7 +10,7 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y software-properties-common
 
 sudo apt install -y \
-  unzip zip nano openssh-server \
+  unzip zip tar nano openssh-server \
   curl wget axel \
   htop pv tree git nano pwgen \
   openssl certbot
