@@ -56,6 +56,17 @@ server {
     add_header X-Content-Type-Options "nosniff";
     add_header X-XSS-Protection "1; mode=block";
 
+    add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;
+    # Add Referrer-Policy
+    add_header Referrer-Policy 'no-referrer-when-downgrade';
+
+    # Add Permissions-Policy
+    # Disables geolocation and microphone access from all origins
+    add_header Permissions-Policy 'geolocation=(), microphone=()';
+
+    # Upgrade Insecure Requests
+    add_header Content-Security-Policy 'upgrade-insecure-requests';
+
     index index.php index.html;
 
     charset utf-8;
