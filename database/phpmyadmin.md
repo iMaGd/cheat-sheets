@@ -46,6 +46,23 @@ location /pma {
 		alias /var/www/html/phpmyadmin/;
 	}
 }
+
+location /pma {
+	alias /usr/share/phpmyadmin/;
+	try_files $uri $uri/ /pma/index.php$is_args$args;
+
+	location ~ ^/pma/(.+\.php)$ {
+		try_files \$uri =404;
+		fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+		fastcgi_index index.php;
+		fastcgi_param SCRIPT_FILENAME $request_filename;
+		include fastcgi_params;
+	}
+
+	location ~* ^/pma/(.+\.(jpeg|jpg|png|css|gif|ico|js|html|xml|txt))$ {
+		alias /usr/share/phpmyadmin/$1;
+	}
+}
 ```
 
 Test the Nginx configuration for syntax errors
