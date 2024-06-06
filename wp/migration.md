@@ -1,7 +1,21 @@
+### Simple domain swap on the same server
 
-
-
+```bash
+wp search-replace 'domain.net' 'domain.com' --all-tables-with-prefix --network
+wp cache flush
 ```
+
+- Change domain.net in wp-config.php file.
+- Run following command to update the certificate (assuming you are using ngnix)
+
+```bash
+sudo certbot --nginx -d domain.com
+sudo certbot install --cert-name domain.com
+```
+
+### Migration to new server
+
+```bash
 #!/bin/bash
 
 echo "1. Download database file from remote server? y/n "
