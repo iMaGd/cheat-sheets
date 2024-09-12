@@ -69,6 +69,7 @@ if [ -n "$selected_php_version" ]; then
 		post_max_size="50M"
 		upload_max_filesize="50M"
 		max_execution_time="300"
+		# make sure to change php_admin_value[max_execution_time] in same max_execution_time in file  /var/run/php/php${php_version}-fpm-${site_user}.sock
 		max_input_time="120"
 		max_input_vars="2000"
 		session_gc_maxlifetime="1440"
@@ -97,6 +98,7 @@ if [ -n "$selected_php_version" ]; then
 			"s/^;?realpath_cache_size = .*/realpath_cache_size = $realpath_cache_size/"
 			"s/^;?realpath_cache_ttl = .*/realpath_cache_ttl = $realpath_cache_ttl/"
 		)
+
 
 		# Check if PHP version was selected and installed
 		if [ -n "$selected_php_version" ]; then

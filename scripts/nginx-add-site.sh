@@ -191,6 +191,7 @@ chdir = /
 security.limit_extensions = .php
 php_admin_value[disable_functions] = exec,passthru,shell_exec,system
 php_admin_flag[allow_url_fopen] = on
+php_admin_value[max_execution_time] = 120
 EOF"
 
 
