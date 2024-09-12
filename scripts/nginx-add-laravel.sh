@@ -159,8 +159,6 @@ sudo nginx -t
 sudo systemctl reload nginx
 
 
-read -p "Enter the username: " site_user
-
 pool_dir="/etc/php/${php_version}/fpm/pool.d"
 pool_file="${pool_dir}/${site_user}.conf"
 
