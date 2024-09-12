@@ -52,7 +52,11 @@ su superadmin
 ./scripts/mysql-install.sh  # MySQL
 
 # Add database user
-./scripts/mysql-adduser.sh
+./scripts/mysql-add-user.sh
+# Grant database user
+./scripts/mysql-grant-user.sh
+# Or update database user
+./scripts/mysql-update-user.sh
 
 # Add a virtual site
 ./scripts/apache-add-site.sh
