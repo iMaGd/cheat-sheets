@@ -80,6 +80,8 @@ su superadmin
 # Install PhpMyAdmin
 ./scripts/phpmyadmin.sh
 
+# Install redis
+./scripts/redis-install.sh
 ```
 
 
