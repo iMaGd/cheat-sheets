@@ -29,27 +29,32 @@ fi
 # Prompt for database where the privileges should be set
 read -p "Enter database name (leave blank for all databases): " db_name
 
-# Create databse if does not exists
-mysql -u"$root_user" -p"${root_pass}" -e "CREATE DATABASE IF NOT EXISTS ${db_name};"
+# Prompt for the host or IP address from which the user should be allowed to connect
+read -p "Enter the host or IP address for remote access (or %) (leave blank for localhost): " db_host
+db_host=${db_host:-localhost}
+
+# Create database if it does not exist
+mysql --user="$root_user" --password="$root_pass" --execute="CREATE DATABASE IF NOT EXISTS $db_name;"
 
 # Connect to MySQL/MariaDB server and create new user
 mysql --user="$root_user" --password="$root_pass" --execute="
-CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_pass';"
+CREATE USER '$db_user'@'$db_host' IDENTIFIED BY '$db_pass';"
 
 # Set up privileges
 if [[ -z "${db_name// }" ]]; then
     echo "Granting all privileges on all databases to $db_user..."
     mysql --user="$root_user" --password="$root_pass" --execute="
-    GRANT ALL PRIVILEGES ON *.* TO '$db_user'@'localhost' WITH GRANT OPTION;"
+    GRANT ALL PRIVILEGES ON *.* TO '$db_user'@'$db_host' WITH GRANT OPTION;"
 else
     echo "Granting all privileges on database '$db_name' to $db_user..."
     mysql --user="$root_user" --password="$root_pass" --execute="
-    GRANT ALL PRIVILEGES ON \`${db_name// /_}\`.* TO '$db_user'@'localhost';"
+    GRANT ALL PRIVILEGES ON \`${db_name// /_}\`.* TO '$db_user'@'$db_host';"
 fi
 
 mysql --user="$root_user" --password="$root_pass" --execute="FLUSH PRIVILEGES;"
 
 # Output the username and password
 echo "New database user '$db_user' created with the password '$db_pass'"
+echo "User is allowed to connect from '$db_host'"
 
 echo "Privileges have been assigned."
