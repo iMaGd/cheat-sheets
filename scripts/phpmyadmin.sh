@@ -5,7 +5,7 @@ read -p "Enter PhpMyAdmin alias [Default: /pma]: " PMA_ALIAS
 PMA_ALIAS=${PMA_ALIAS:-/pma}
 
 # Prompt for PHP-FPM version
-read -p "Enter your PHP-FPM version (e.g., 8.1, 8.2) [Default: 8.1]: " PHP_FPM_VERSION
+read -p "Enter your PHP-FPM version (e.g., 8.1, 8.2, 8.3) [Default: 8.1]: " PHP_FPM_VERSION
 PHP_FPM_VERSION=${PHP_FPM_VERSION:-8.1}
 
 if systemctl is-active --quiet php${PHP_FPM_VERSION}-fpm.service; then
