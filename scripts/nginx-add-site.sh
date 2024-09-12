@@ -4,8 +4,8 @@
 set -e
 
 # Ask for domain names
-read -p "Enter the domain name for new site (e.g., www.example.com): " new_domain
-read -p "Enter the name for new site (e.g., example_com): " site_name
+read -p "Enter the domain name for new site (e.g., example.com or sub.example.com): " new_domain
+read -p "Enter the name for new site (e.g., example-com): " site_name
 
 # Ask for document root with default value
 read -p "Enter the DocumentRoot for your new site [default: /var/www/html]: " site_path

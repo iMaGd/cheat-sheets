@@ -4,7 +4,7 @@
 set -e
 
 # Ask for domain names
-read -p "Enter the domain name for new site (e.g., www.example.com): " new_domain
+read -p "Enter the domain name for new site (e.g., example.com or sub.example.com): " new_domain
 read -p "Enter the name for new site (e.g., example-com): " site_name
 read -p "Enter the user of new site (e.g., example-com): " site_user
 
