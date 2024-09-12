@@ -29,6 +29,9 @@ fi
 # Prompt for database where the privileges should be set
 read -p "Enter database name (leave blank for all databases): " db_name
 
+# Create databse if does not exists
+mysql -u"$root_user" -p"${root_pass}" -e "CREATE DATABASE IF NOT EXISTS ${db_name};"
+
 # Connect to MySQL/MariaDB server and create new user
 mysql --user="$root_user" --password="$root_pass" --execute="
 CREATE USER '$db_user'@'localhost' IDENTIFIED BY '$db_pass';"
