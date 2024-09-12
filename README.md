@@ -58,6 +58,8 @@ su superadmin
 ./scripts/apache-add-site.sh
 # OR
 ./scripts/nginx-add-site.sh
+# OR
+./scripts/nginx-add-laravel.sh
 
 # Install Composer
 ./scripts/composer-install.sh

@@ -5,8 +5,8 @@ set -e
 
 # Ask for domain names
 read -p "Enter the domain name for new site (e.g., www.example.com): " new_domain
-read -p "Enter the name for new site (e.g., example_com): " site_name
-read -p "Enter the user of new site (e.g., laravel): " site_user
+read -p "Enter the name for new site (e.g., example-com): " site_name
+read -p "Enter the user of new site (e.g., example-com): " site_user
 
 # Ask for document root with default value
 read -p "Enter the DocumentRoot for your new site [default: /home/${site_user}/www]: " site_path
@@ -45,7 +45,7 @@ add_new_virtualhost() {
     sudo mkdir -p $site_path/public
 
     # Removing previous symbolic link
-    sudo rm /etc/nginx/sites-enabled/${site_name}
+    sudo rm -f /etc/nginx/sites-enabled/${site_name}
 
     sudo tee "$vhost_conf_file" > /dev/null << EOF
 server {
