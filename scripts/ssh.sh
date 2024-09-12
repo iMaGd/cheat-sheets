@@ -67,9 +67,9 @@ if prompt_yes_no "Block 'root' user to login?"; then
     sudo sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 fi
 
-sudo sshd -t
+sudo ssh -t
 
 # Restart to apply changes
-sudo service sshd restart
+sudo service ssh restart
 
 echo "SSH has been secured."
