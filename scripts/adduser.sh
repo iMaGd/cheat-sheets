@@ -80,7 +80,7 @@ if prompt_yes_no "Copy authorized_keys of root user to directory of '$USERNAME' 
     echo "authorized_keys copied to directory of '$USERNAME' user."
 
     # Restart to apply changes
-    sudo service sshd restart
+    sudo service ssh restart
     echo "SSH service restarted and changes applied."
 fi
 
