@@ -64,6 +64,7 @@ elif prompt_yes_no "Grant '$USERNAME' Moderator privileges?"; then
     echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service php*-fpm *" | sudo tee /etc/sudoers.d/${USERNAME}
     echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service mysql *" | sudo tee /etc/sudoers.d/${USERNAME}
     echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/sbin/service mariadb *" | sudo tee /etc/sudoers.d/${USERNAME}
+    echo "${USERNAME} ALL=(ALL) NOPASSWD: /usr/bin/supervisorctl restart horizon" | sudo tee /etc/sudoers.d/${USERNAME}
 
     sudo chmod 0440 /etc/sudoers.d/${USERNAME}
 fi
