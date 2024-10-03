@@ -1,10 +1,12 @@
 #!/bin/bash
 
 # Define variables
-APP_PATH="/home/username/www"
-USER="username"
+APP_NAME="app_name"
+APP_PATH="/home/${APP_NAME}/www"
+USER="app_user"
 SERVER="10.10.10.10"
 SHARED_FOLDER="${APP_PATH}/shared"
+# SHARED_FOLDER="/mnt/volume1/${APP_NAME}/shared"
 RELEASE_FOLDER="${APP_PATH}/releases"
 CURRENT_FOLDER="${APP_PATH}/current"
 TIMESTAMP=$(date +"%Y%m%d%H%M%S")
@@ -16,6 +18,10 @@ echo "Clearing caches"
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+php artisan horizon:terminate
+
+rm -rf storage/debugbar/*
+rm -rf storage/app/livewire-tmp/*
 
 echo "Starting deployment of new release..."
 
@@ -30,13 +36,44 @@ ssh -t ${USER}@${SERVER} "
     TIMESTAMP=\"${TIMESTAMP}\"
 
     mkdir -p "\${RELEASE_FOLDER}/\${TIMESTAMP}"
-    mkdir -p "\${SHARED_FOLDER}/app"
-    mkdir -p "\${SHARED_FOLDER}/logs"
+    mkdir -p "\${SHARED_FOLDER}/storage/app"
+    mkdir -p "\${SHARED_FOLDER}/storage/logs"
 "
 
 # Sync the latest files to a new release folder
 echo "Syncing files to the server..."
-rsync -avz --exclude '.env' --exclude '.git' --exclude 'node_modules' --exclude 'tests' --exclude 'storage/app/public' --exclude 'storage/app/uploads' --exclude 'vendor' . ${USER}@${SERVER}:${RELEASE_FOLDER}/${TIMESTAMP}
+rsync -avz --delete \
+    --include='app/' \
+    --include='app/***' \
+    --include='artisan' \
+    --include='bootstrap/' \
+    --include='bootstrap/***' \
+    --include='composer.json' \
+    --include='composer.lock' \
+    --include='.env.example' \
+    --include='database/' \
+    --include='database/***' \
+    --include='lang/' \
+    --include='lang/***' \
+    --include='config/' \
+    --include='config/***' \
+    --include='public/' \
+    --include='public/***' \
+    --include='resources/' \
+    --include='resources/***' \
+    --include='storage/' \
+    --include='storage/***' \
+    --include='routes/' \
+    --include='routes/***' \
+    --exclude='storage/app/private/***' \
+    --exclude='storage/app/tmp/***' \
+    --exclude='storage/app/livewire-tmp/***' \
+    --exclude='.*' \
+    --exclude='*/.*' \
+    --exclude='*' \
+    . \
+    ${USER}@${SERVER}:${RELEASE_FOLDER}/${TIMESTAMP}
+
 
 ssh -t ${USER}@${SERVER} "
     set -e
@@ -49,10 +86,8 @@ ssh -t ${USER}@${SERVER} "
     TIMESTAMP=\"${TIMESTAMP}\"
     USER=\"${USER}\"
 
-    # Install composer dependencies in the new release folder
+    # Navigate to new release folder
     cd \${RELEASE_FOLDER}/\${TIMESTAMP}
-    echo \"Installing Composer dependencies...\"
-    composer install --optimize-autoloader --no-dev
 
     # Check if .env file exists, and if not, generate it
     if [ ! -f \${ENV_PATH} ]; then
@@ -64,6 +99,11 @@ ssh -t ${USER}@${SERVER} "
 
     # Symlink the .env file to the current release
     ln -nfs \${ENV_PATH} ${RELEASE_FOLDER}/${TIMESTAMP}/.env
+    rm -f .env.example
+
+    # Install composer dependencies in the new release folder
+    echo \"Installing Composer dependencies...\"
+    composer install --optimize-autoloader --no-dev
 
     # Set permissions for storage and cache directories
     echo \"Setting permissions...\"
@@ -74,14 +114,19 @@ ssh -t ${USER}@${SERVER} "
     echo \"Creating symlink for shared directory...\"
     rm -rf storage/app
     rm -rf storage/logs
-    ln -nfs \${SHARED_FOLDER}/app storage/app
-    ln -nfs \${SHARED_FOLDER}/logs storage/logs
+    ln -nfs \${SHARED_FOLDER}/storage/app storage/app
+    ln -nfs \${SHARED_FOLDER}/storage/logs storage/logs
+
+    # Remove previous symlink
+    rm -f public/storage
+    ln -nfs \${SHARED_FOLDER}/storage/app/public public/storage
 
     # Update symlink to point to the new release
     echo \"Updating symlink to point to the new release...\"
     # Remove previous symlink
     rm -f \${CURRENT_FOLDER}
     ln -nfs \${RELEASE_FOLDER}/\${TIMESTAMP} \${CURRENT_FOLDER}
+    cd \${CURRENT_FOLDER}
 
     # Run database migrations
     echo \"Running migrations...\"
@@ -92,6 +137,12 @@ ssh -t ${USER}@${SERVER} "
     php artisan config:cache
     php artisan route:cache
     php artisan view:cache
+
+    # Restarting queue workers
+    echo \"Restarting queue workers...\"
+    php artisan server-load-counters:reset
+    php artisan horizon:terminate
+
     echo \"All cleared...\"
 
     # Cleanup old releases (keep last 5)
