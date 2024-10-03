@@ -56,6 +56,8 @@ server {
     add_header X-Content-Type-Options "nosniff";
     add_header X-XSS-Protection "1; mode=block";
 
+    client_max_body_size 2M;
+
     add_header Strict-Transport-Security 'max-age=31536000; includeSubDomains' always;
     # Add Referrer-Policy
     add_header Referrer-Policy 'no-referrer-when-downgrade';
