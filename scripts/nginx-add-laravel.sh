@@ -51,7 +51,7 @@ add_new_virtualhost() {
 server {
     listen 80;
     server_name $new_domain;
-    root $site_path/public;
+    root $site_path/current/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
@@ -72,7 +72,7 @@ server {
 
     charset utf-8;
 
-    client_max_body_size 50M;
+    client_max_body_size 10M;
 
     location / {
         try_files \$uri \$uri/ /index.php?\$args;
