@@ -67,7 +67,7 @@ if prompt_yes_no "Block 'root' user to login?"; then
     sudo sed -i 's/^PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 fi
 
-sudo ssh -t
+sudo sshd -t
 
 # Restart to apply changes
 sudo service ssh restart
