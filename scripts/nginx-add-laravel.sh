@@ -42,7 +42,7 @@ prompt_yes_no() {
 
 add_new_virtualhost() {
     echo "Configuring VirtualHost for new site..."
-    sudo mkdir -p $site_path/public
+    sudo mkdir -p $site_path/current/public
 
     # Removing previous symbolic link
     sudo rm -f /etc/nginx/sites-enabled/${site_name}
@@ -147,9 +147,9 @@ fi
 
 # Create the info.php file with phpinfo()
 if prompt_yes_no "Do you want to add a info.php file with phpinfo() in the new site directory?"; then
-	sudo mkdir -p $site_path/public
-	sudo bash -c "echo '<?php phpinfo(); ?>' > $site_path/public/info.php"
-	sudo chmod 644 "${site_path}/public/info.php"
+	sudo mkdir -p $site_path/current/public
+	sudo bash -c "echo '<?php phpinfo(); ?>' > $site_path/current/public/info.php"
+	sudo chmod 644 "${site_path}/current/public/info.php"
 fi
 
 # Check Nginx configuration for syntax errors
