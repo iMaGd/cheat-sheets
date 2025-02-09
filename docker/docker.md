@@ -9,6 +9,12 @@
 or
 `docker image ls`
 
+#### Pull an image
+Usually pulls from docker hub
+
+`docker image pull <image-name>`
+or
+`docker pull <image-name>`
 
 ### Build an image
 
@@ -66,11 +72,37 @@ or shorter syntax:
 docker run ubuntu
 ```
 
-More options:
+### How `run` works?
+
+It runs three commands behind the scene:
+
+```bash
+docker [image] pull
+docker [container] create
+docker [container] start
 ```
-docker run -d ubuntu (-d detach mode -in background)
-docker run -d ubuntu --name my-ubuntu assign name for container
-docker run -d ubuntu --name my-ubuntu -p <hostPort>:<containerPort> assign name for container
+
+
+### Run container from image in detach mode (process in background `-d`)
+```bash
+# Use -d to run container in detach mode (process in background)
+docker run -d ubuntu
+# assign name for container
+docker run -d ubuntu --name my-ubuntu
+```
+
+### Map a port on your host to a port on the container
+
+```bash
+docker run -d ubuntu --publish <hostPort>:<containerPort>
+```
+or
+```bash
+docker run -d ubuntu -p <hostPort>:<containerPort>
+```
+
+```bash
+docker run -d ubuntu --name my-ubuntu -p <hostPort>:<containerPort>
 
 docker run -d ubuntu --name my-ubuntu -p <hostPort>:<containerPort> -v <vol-name>:/path/in/container/filesystem
 
@@ -79,12 +111,15 @@ docker run -d ubuntu --name my-ubuntu -p <hostPort>:<containerPort> -v $(pwd):/p
 docker run --name myApache1 -p 9090:80 -d httpd
 ```
 
-### Run new container from image (-it interactive mode)
+### Run container from image in interactive mode (`-it`)
 ```
 docker run -it ubuntu
 docker run -it ubuntu bash  (run bash)
 ```
-
+### Show usage and stats about containers
+```
+docker container stats
+```
 
 ### Stop a container
 ```
