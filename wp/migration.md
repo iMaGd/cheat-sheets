@@ -61,3 +61,31 @@ wp site list --field=url --path=/home/username/public_html/ \
 
 echo "8. Migration completed!"
 ```
+
+#### Sample 2
+
+```bash
+echo "Search and replace domain ..";
+wp search-replace --network --all-tables-with-prefix 'https://demo.example.com' 'https://main.example.com' \
+--verbose --report-changed-only --path=/var/www/html --allow-root
+
+
+wp search-replace 'demo.example.com' 'main.example.com' wp_site wp_blogs \
+--verbose --path=/var/www/html --allow-root
+
+echo "5. Search and replace domain in Elementor..";
+wp search-replace --network https:\\\/\\\/demo.example.com https:\\\/\\\/main.example.com wp*_postmeta \
+--verbose --report-changed-only --path=/var/www/html --allow-root
+
+echo "6. Flushing cache .."
+
+wp rewrite flush --path=/var/www/html --allow-root
+wp cache flush --path=/var/www/html --allow-root
+
+echo "7. Flushing assets .. "
+wp site list --field=url --path=/var/www/html --allow-root \
+| xargs -n1 -I % wp elementor flush_css --network --url=% --path=/var/www/html --allow-root
+
+wp site list --field=url --path=/var/www/html --allow-root \
+| xargs -n1 -I % wp autoptimize clear --url=% --path=/var/www/html --allow-root
+```
