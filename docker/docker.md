@@ -6,6 +6,8 @@
 #### Show images
 
 `docker images`
+or
+`docker image ls`
 
 
 ### Build an image
@@ -36,6 +38,9 @@ docker build -t crm-api:1.2.3 .
 ### Remove all dangling images
 `docker image prune`
 
+### Check the history of an image
+`docker image history <image-name>`
+
 
 ---
 
@@ -52,8 +57,17 @@ docker build -t crm-api:1.2.3 .
 
 
 ### Run container from image
+
+```
+docker container run ubuntu
+```
+or shorter syntax:
 ```
 docker run ubuntu
+```
+
+More options:
+```
 docker run -d ubuntu (-d detach mode -in background)
 docker run -d ubuntu --name my-ubuntu assign name for container
 docker run -d ubuntu --name my-ubuntu -p <hostPort>:<containerPort> assign name for container
@@ -118,6 +132,10 @@ docker exec -it <container-name-id> /bin/bash
 docker exec -it <container-name-id> ls -a
 docker exec -it <container-name-id> -u root <command> Set login user
 ```
+
+### Image vs Container
+
+Docker image is like a class in programming and container is an instantiated class.
 
 ---
 
