@@ -116,6 +116,12 @@ docker run --name myApache1 -p 9090:80 -d httpd
 docker run -it ubuntu
 docker run -it ubuntu bash  (run bash)
 ```
+
+### Delete container automatically when container once stopped
+```
+docker container -it --rm ubuntu
+```
+
 ### Show usage and stats about containers
 ```
 docker container stats
@@ -156,21 +162,42 @@ docker restart <container-name-or-id>
 
 ### Log Container Output
 ```
+docker container logs <container-name-or-id>
 docker logs <container-name-or-id>
 docker logs -f <container-name-or-id> continuously show the outputs
 ```
 
 ### Execute command in running container
 ```
+docker container exec -it <container-name-id> <command>
 docker exec -it <container-name-id> <command>
-docker exec -it <container-name-id> /bin/bash
+docker exec -it <container-name-id> bash
 docker exec -it <container-name-id> ls -a
 docker exec -it <container-name-id> -u root <command> Set login user
 ```
 
+```
+docker exec -it ubuntu bash
+docker exec -it ubuntu apt install git
+```
+
+
 ### Image vs Container
 
 Docker image is like a class in programming and container is an instantiated class.
+
+### Copy files to a container
+
+```
+docker cp <host/directory> <container-name-id>:<container/directory>
+```
+
+### Copy files from a container
+
+```
+docker cp <container-name-id>:<container/directory> <host/directory>
+```
+
 
 ---
 
