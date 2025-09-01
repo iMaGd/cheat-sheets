@@ -47,6 +47,9 @@ docker build -t crm-api:1.2.3 .
 ### Check the history of an image
 `docker image history <image-name>`
 
+### Inspect an image
+`docker image inspect <id>`
+
 
 ---
 
@@ -54,9 +57,17 @@ docker build -t crm-api:1.2.3 .
 ## Containers
 
 
-### Show running containers  (processes)
-`docker ps`
+### Show running containers (processes)
+```
+docker container ls
+# or
+docker ps
+```
 
+*Include containers' size as well*
+```
+docker container ls -s
+```
 
 ### Show stoped containers
 `docker ps -a`
@@ -66,9 +77,7 @@ docker build -t crm-api:1.2.3 .
 
 ```
 docker container run ubuntu
-```
-or shorter syntax:
-```
+# or
 docker run ubuntu
 ```
 
@@ -198,6 +207,11 @@ docker cp <host/directory> <container-name-id>:<container/directory>
 docker cp <container-name-id>:<container/directory> <host/directory>
 ```
 
+### Containers usage
+```
+docker container stats
+```
+
 
 ---
 
@@ -207,7 +221,8 @@ docker cp <container-name-id>:<container/directory> <host/directory>
 
 ### Create volume
 `docker volume create <volume-name>`
-
+> The volume data will be stored in a directory like:
+`/var/lib/docker/volumes/my_volume/_data`
 
 ### Copy file from container to host
 `docker cp <container-name>:/app/log.txt .`
@@ -216,6 +231,8 @@ docker cp <container-name-id>:<container/directory> <host/directory>
 ### Copy file from host to container
 `docker cp version.txt <container-name>:/app`
 
+### Inspect a volume
+`docker volume inspect <id>`
 
 ---
 
@@ -235,16 +252,21 @@ docker cp <container-name-id>:<container/directory> <host/directory>
 
 ### Build application from images
 ```
-docker-compose build`
-docker-compose build --no-cache Rebuild from fresh images
+docker compose build -t .`
+docker compose build --no-cache Rebuild from fresh images
 ```
 
 ### Start the application
 ```
-docker-compose up
-docker-compose up -d (detach mode -n background)
-docker-compose up -d --build rebuilds each image and starts application
+docker compose up
+docker compose up -d (detach mode -n background)
+docker compose up -d --build rebuilds each image and starts application
 ```
 
 ### Stop application
-`docker-compose down`
+`docker compose down` \
+or \
+`docker compose stop`
+
+### Remove containers
+`docker compose rm`
