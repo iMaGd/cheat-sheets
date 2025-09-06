@@ -89,3 +89,24 @@ sudo netfilter-persistent save
 # Restart iptables to apply the rules
 sudo systemctl restart netfilter-persistent
 ```
+
+### Flush & allow all traffics:
+
+```bash
+sudo iptables -F
+sudo iptables -X
+sudo iptables -t nat -F
+sudo iptables -t nat -X
+
+sudo iptables -P INPUT ACCEPT
+sudo iptables -P FORWARD ACCEPT
+sudo iptables -P OUTPUT ACCEPT
+```
+
+`-F` clears all rules.
+
+`-X` removes any user-defined chains.
+
+`-P` ACCEPT sets the default policy to allow all traffic.
+
+Now the firewall won’t block anything.
