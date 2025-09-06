@@ -103,6 +103,16 @@ sudo iptables -P FORWARD ACCEPT
 sudo iptables -P OUTPUT ACCEPT
 ```
 
+Store and restart
+```bash
+# Save rules
+sudo netfilter-persistent save
+
+# Restart iptables to apply the rules
+sudo systemctl restart netfilter-persistent
+service iptables restart
+```
+
 `-F` clears all rules.
 
 `-X` removes any user-defined chains.
