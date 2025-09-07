@@ -11,6 +11,10 @@ or
 ```bash
 netstat -tuln
 ```
+Check if a local port on host is accessible:
+```bash
+nc -vz 127.0.0.1 3306
+```
 ---
 
 ### Checking from outside the server:
