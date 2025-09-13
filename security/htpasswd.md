@@ -82,12 +82,47 @@ To add an additional layer of security by implementing HTTP basic authentication
 	```apache
 	AuthType Basic
 	AuthName "phpMyAdmin Secure Access"
-	AuthUserFile /etc/phpmyadmin/.htpasswd
+	AuthUserFile /var/www/secure/.htpasswd
 	Require valid-user
 	```
 
-4. **Restart Apache2 Configuration**
 
-	```sh
-	sudo service apache2 restart
+	Or, add it to the virtual host file:
+
+	```
+	<VirtualHost *:443>
+		ServerName secure.domain.com
+
+		DocumentRoot /var/www/secure
+
+		SSLEngine on
+		SSLCertificateFile      /etc/ssl/certs/domain.com.fullchain.pem
+		SSLCertificateKeyFile   /etc/ssl/private/domain.com.key
+		Protocols h2 http/1.1
+
+		<Directory "/var/www/secure">
+			Options Indexes FollowSymLinks
+			AllowOverride None
+			Require all granted
+
+			# Auth settings
+			AuthType Basic
+			AuthName "Restricted Area"
+			AuthUserFile /var/www/secure/.htpasswd
+			Require valid-user
+		</Directory>
+
+		# Block direct access to the .htpasswd and .htaccess files
+		<FilesMatch "^\.ht">
+			Require all denied
+		</FilesMatch>
+	</VirtualHost>
+	```
+
+
+4. **Reload Apache2 Configuration**
+
+	```bash
+	sudo apache2ctl configtest
+	sudo service apache2 reload
 	```
