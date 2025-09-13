@@ -133,16 +133,5 @@ RewriteRule ^(.*)$ $1 [R=200,L]
 -------
 
 ## Pass Protect Directory
-Add new username and password
 
-```bash
-sudo htpasswd -c /etc/apache2/.htpasswd majid
-```
-
-Create new .htaccess file in the directory and add the following
-```bash
-AuthType Basic
-AuthName "Password Required"
-Require valid-user
-AuthUserFile /etc/apache2/.htpasswd
-```
+See [htpasswd guide](./htpasswd.md) for password protecting directories
