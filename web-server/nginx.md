@@ -37,9 +37,47 @@ server {
 sudo ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/
 ```
 
+-----
+
+### Location Modifiers
+
+-   `location = /path`\
+    Exact match. Highest priority.
+
+-   `location ^~ /path/`\
+    Prefix match. If matched, **stop searching** (ignores regex).
+
+-   `location ~ pattern`\
+    Regex match (case-sensitive). First defined regex that matches is
+    used.
+
+-   `location ~* pattern`\
+    Regex match (case-insensitive).
+
+-   `location /path/`\
+    Prefix match (longest wins if multiple).
+
+## Priority Order
+
+1.  Exact match (`=`)\
+2.  Prefix match with `^~`\
+3.  Regex matches (`~`, `~*`) → first defined wins\
+4.  Longest normal prefix match
+
+## Example
+
+``` nginx
+location = /favicon.ico   { ... }   # exact
+location ^~ /images/      { ... }   # prefix, stop search
+location ~ \.php$         { ... }   # regex (case-sensitive)
+location /                { ... }   # fallback prefix
+```
+
+
+
 ----
 
-### SSL om Ports
+### SSL on Ports
 
 - Port 443 is the well-known default for HTTPS.
 - You can enable TLS on any TCP port.
