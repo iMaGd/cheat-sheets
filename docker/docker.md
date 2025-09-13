@@ -68,6 +68,11 @@ docker ps
 ```
 docker container ls -s
 ```
+or in better format 
+
+```
+docker ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Image}}\t{{.Status}}"
+```
 
 ### Show stoped containers
 `docker ps -a`
