@@ -151,6 +151,143 @@ server {
 ```
 -------
 
+### Config for CraftCMS
+
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com www.example.com;
+
+    root /home/my-user/apps/my-app/web;
+
+    # Allow Let's Encrypt HTTP-01 challenge without forcing HTTPS
+    location ^~ /.well-known/acme-challenge/ {
+        default_type "text/plain";
+        allow all;
+    }
+
+    # Everything else redirects to HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+    access_log /var/log/nginx/my-app_access_http.log;
+    error_log  /var/log/nginx/my-app_error_http.log;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name example.com www.example.com;
+
+    root /home/my-user/apps/my-app/web;
+    index index.php index.html;
+
+    # ---- SSL (adjust to your cert paths or your ACME client) ----
+    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
+
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:50m;
+    ssl_session_tickets off;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    # HSTS (enable after confirming HTTPS works; preload optional)
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+
+    # Security headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    # Tweak CSP to your needs; this permissive example supports inline scripts, etc.
+    add_header Content-Security-Policy "default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'" always;
+
+    # Logs
+    access_log /var/log/nginx/my-app_access.log;
+    error_log  /var/log/nginx/my-app_error.log;
+
+    # Gzip
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript application/xml+rss image/svg+xml;
+    gzip_min_length 256;
+
+    # ------------------------
+    # Block sensitive things
+    # ------------------------
+
+    # Never serve dotfiles (.env, .htpasswd, .git, etc.)
+    location ~ /\.(?!well-known) {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    # Extra hardening against accidental placement of .htpasswd in web root
+    location = /.htpasswd { deny all; return 404; }
+
+    # Deny access to private folders and common project files if exposed
+    location ~* ^/(config|storage|vendor|node_modules|tests)(/|$)  {
+        deny all;
+        return 404;
+    }
+    location ~* ^/(composer\.json|composer\.lock|yarn\.lock|package\.json)$ {
+        deny all;
+        return 404;
+    }
+
+    # ------------------------
+    # CMS routing
+    # ------------------------
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Static assets caching
+    location ~* \.(ico|css|js|gif|jpe?g|png|webp|svg|woff2?|ttf|eot)$ {
+        expires 30d;
+        add_header Cache-Control "public, max-age=2592000, immutable";
+        access_log off;
+        try_files $uri =404;
+    }
+
+    # PHP-FPM handling (adjust PHP version/socket)
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;  # or 127.0.0.1:9000
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
+        fastcgi_index index.php;
+
+        # Useful buffers/timeouts for Craft (CP, image transforms)
+        fastcgi_buffers 8 16k;
+        fastcgi_buffer_size 32k;
+        fastcgi_connect_timeout 300;
+        fastcgi_send_timeout 300;
+        fastcgi_read_timeout 300;
+    }
+
+    # Error handling: let Craft render 404/50x via index.php
+    error_page 404 /index.php;
+    error_page 500 502 503 504 /index.php;
+
+    # ----------------------------------------------
+    # Password-protected directory (/protected)
+    # Place real files under: /home/my-user/apps/my-app/web/protected
+    # Keep .htpasswd OUTSIDE the web root, e.g. /home/my-user/secure/.htpasswd
+    location ^~ /protected/ {
+        auth_basic           "Restricted Area";
+        auth_basic_user_file /home/my-user/secure/.htpasswd;
+
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+}
+```
+
+-------
+
 ## Pass Protect Directory
 
 See [htpasswd guide](./htpasswd.md) for password protecting directories
