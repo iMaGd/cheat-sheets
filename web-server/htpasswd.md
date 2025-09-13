@@ -11,13 +11,25 @@ To add an additional layer of security by implementing HTTP basic authentication
 	sudo apt install apache2-utils
 	```
 
-2. **Create an HTTP Authentication User File**
+2. **Create/update the `.htpasswd` file**
 
-	The following command will create a new file and stores a username (`username`). Replace `username` with the username you want to use for phpMyAdmin login.
+
 
 	```sh
-	sudo htpasswd /etc/nginx/.htpasswd username
+	# Install htpasswd utility (Debian/Ubuntu)
+	sudo apt-get install -y apache2-utils
+
+	# Create the secure directory (outside public folder)
+	mkdir -p /home/my-user/secure
+	chmod 700 /home/my-user/secure
+
+	# Create or update an entry (will prompt for password)
+	htpasswd -c /home/my-user/secure/.htpasswd my-user
+
+	# Add more users (no -c)
+	htpasswd /home/my-user/secure/.htpasswd anotheruser
 	```
+
 
 3. **Configure Nginx to Use HTTP Authentication**
 
@@ -30,11 +42,19 @@ To add an additional layer of security by implementing HTTP basic authentication
 	Within the server block, add the `auth_basic` and `auth_basic_user_file` directives like so:
 
 	```nginx
+	# Never serve dotfiles (.env, .htpasswd, .git, etc.)
+    location ~ /\.(?!well-known) {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
 	location / {
 		auth_basic "Administrator Login";
-		auth_basic_user_file /etc/nginx/.htpasswd; # Path to the htpasswd file
+		auth_basic_user_file /home/my-user/secure/.htpasswd;
 
 		# ... existing configuration ...
+		# try_files $uri $uri/ /index.php?$query_string;
 	}
 	```
 
