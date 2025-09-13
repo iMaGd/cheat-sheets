@@ -103,6 +103,9 @@ server {
     listen [::]:443 ssl http2;
     server_name domain.com www.domain.com;
 
+    # We can also listen on multiple TLS ports
+    listen 5443 ssl http2;
+
     ssl_certificate     /etc/ssl/certs/domain.com.fullchain.pem;
     ssl_certificate_key /etc/ssl/private/domain.com.key;
 
