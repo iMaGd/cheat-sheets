@@ -1,4 +1,4 @@
-## System Administration and Linux Server Management Cheat Sheets
+## System Administration and Linux Server Management Reference
 
 This repository contains a collection of cheat sheets useful for system administration and managing Linux servers, with a focus on tasks like configuring servers, managing users, and deploying applications.
 
@@ -6,7 +6,7 @@ This repository contains a collection of cheat sheets useful for system administ
 
 Clone the repository and permit for execution
 ```bash
-sudo git clone https://github.com/iMaGd/cheat-sheets.git && cd cheat-sheets
+sudo git clone https://github.com/iMaGd/SysOps-Reference.git && cd SysOps-Reference
 sudo chmod +x ./scripts/*.sh
 ```
 
